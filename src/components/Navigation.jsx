@@ -6,7 +6,7 @@ function Navigation() {
     <nav className="navbar">
       <div className="nav-container">
         <Link to="/" className="nav-logo">
-          MyApp
+          Steel Ball Run
         </Link>
         <ul className="nav-menu">
           <li className="nav-item">

@@ -11,18 +11,9 @@ function Signup() {
   })
   const navigate = useNavigate()
 
-  const handleChange = (e) => {
-    const { name, value } = e.target
-    setFormData({
-      ...formData,
-      [name]: value,
-    })
-  }
-
   const handleSubmit = (e) => {
     e.preventDefault()
     
-    // Basic validation
     if (!formData.name || !formData.email || !formData.password || !formData.confirmPassword) {
       alert('All fields are required')
       return
@@ -33,13 +24,11 @@ function Signup() {
       return
     }
 
-    // Store user data in localStorage
     localStorage.setItem('userData', JSON.stringify({
       name: formData.name,
       email: formData.email,
     }))
 
-    // Navigate to success page
     navigate('/success')
   }
 
@@ -55,7 +44,7 @@ function Signup() {
               id="name"
               name="name"
               value={formData.name}
-              onChange={handleChange}
+              onChange={(e) => setFormData({...formData, [e.target.name]: e.target.value})}
               placeholder="Enter your full name"
               required
             />
@@ -68,7 +57,7 @@ function Signup() {
               id="email"
               name="email"
               value={formData.email}
-              onChange={handleChange}
+              onChange={(e) => setFormData({...formData, [e.target.name]: e.target.value})}
               placeholder="Enter your email"
               required
             />
@@ -81,7 +70,7 @@ function Signup() {
               id="password"
               name="password"
               value={formData.password}
-              onChange={handleChange}
+              onChange={(e) => setFormData({...formData, [e.target.name]: e.target.value})}
               placeholder="Enter your password"
               required
             />
@@ -94,7 +83,7 @@ function Signup() {
               id="confirmPassword"
               name="confirmPassword"
               value={formData.confirmPassword}
-              onChange={handleChange}
+              onChange={(e) => setFormData({...formData, [e.target.name]: e.target.value})}
               placeholder="Confirm your password"
               required
             />

@@ -6,9 +6,9 @@ function Success() {
     <div className="page-container">
       <div className="success-container">
         <div className="success-icon">✓</div>
-        <h1>Signup Successful!</h1>
-        <p>Your account has been created successfully.</p>
-        <p>Welcome to MyApp! We're excited to have you on board.</p>
+        <h1>Niceu Niceu</h1>
+        <p>Your account has been created successfully. You Are now a true jojo and ready to race in Steel Ball Run!</p>
+        <p>Welcome to Steel Ball Run! We're excited to have you on board.</p>
         <div className="button-group">
           <Link to="/profile" className="btn btn-primary">
             Go to Profile

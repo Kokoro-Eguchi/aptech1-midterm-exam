@@ -7,22 +7,16 @@ function Profile() {
   const navigate = useNavigate()
 
   useEffect(() => {
-    // Get user data from localStorage
     const storedData = localStorage.getItem('userData')
     if (storedData) {
       setUserData(JSON.parse(storedData))
     }
   }, [])
 
-  const handleLogout = () => {
-    localStorage.removeItem('userData')
-    navigate('/')
-  }
-
   return (
     <div className="page-container">
       <div className="profile-container">
-        <h1>User Profile</h1>
+        <h1>Racer's Profile</h1>
         {userData ? (
           <>
             <div className="profile-card">
@@ -39,14 +33,14 @@ function Profile() {
               <Link to="/" className="btn btn-secondary">
                 Back to Home
               </Link>
-              <button onClick={handleLogout} className="btn btn-danger">
+              <button onClick={() => { localStorage.removeItem('userData'); navigate('/'); }} className="btn btn-danger">
                 Logout
               </button>
             </div>
           </>
         ) : (
           <>
-            <p className="no-data">No user data found. Please sign up first.</p>
+            <p className="no-data">No Racer data found. Please sign up first.</p>
             <Link to="/signup" className="btn btn-primary">
               Go to Signup
             </Link>

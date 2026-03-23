@@ -23,7 +23,6 @@
   font-size: 1.1rem;
 }
 
-/* Form Styles */
 .form-container {
   max-width: 500px;
   margin: 3rem auto;
@@ -71,7 +70,6 @@
   box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
 }
 
-/* Success Page Styles */
 .success-container {
   max-width: 500px;
   margin: 3rem auto;
@@ -99,7 +97,6 @@
   font-size: 1rem;
 }
 
-/* Profile Page Styles */
 .profile-container {
   max-width: 600px;
   margin: 3rem auto;
@@ -148,7 +145,6 @@
   padding: 2rem;
 }
 
-/* Button Styles */
 .button-group {
   display: flex;
   gap: 1rem;
