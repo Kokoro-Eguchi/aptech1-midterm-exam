@@ -18,33 +18,67 @@ function Signup() {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,16}$/;
 
-  const validate = (data) => {
-    const newErrors = {};
-    if (!nameRegex.test(data.name)) {
-      newErrors.name = 'Name must be at least 2 characters and contain only letters and spaces.';
+  const validateField = (name, formData) => {
+    let error = '';
+    switch (name) {
+      case 'name':
+        if (!nameRegex.test(formData.name)) {
+          error = 'Name must be at least 2 characters and contain only letters and spaces.';
+        }
+        break;
+      case 'username':
+        if (!usernameRegex.test(formData.username)) {
+          error = 'Username can only contain letters, numbers, dots, underscores, and hyphens.';
+        }
+        break;
+      case 'email':
+        if (!emailRegex.test(formData.email)) {
+          error = 'Please enter a valid email address.';
+        }
+        break;
+      case 'password':
+        if (!passwordRegex.test(formData.password)) {
+          error = 'Password must be 8-16 characters with at least one lowercase, one uppercase, one digit, and one special character.';
+        }
+        break;
+      case 'confirmPassword':
+        if (formData.password !== formData.confirmPassword) {
+          error = 'Passwords doesn\'t match.';
+        }
+        break;
+      default:
+        break;
     }
-    if (!usernameRegex.test(data.username)) {
-      newErrors.username = 'Username can only contain letters, numbers, dots, underscores, and hyphens.';
+    setErrors(prevErrors => ({
+      ...prevErrors,
+      [name]: error
+    }));
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    const newFormData = {
+      ...formData,
+      [name]: value
+    };
+    setFormData(newFormData);
+    validateField(name, newFormData);
+    
+    // If password changed, re-validate confirmPassword
+    if (name === 'password') {
+      validateField('confirmPassword', newFormData);
     }
-    if (!emailRegex.test(data.email)) {
-      newErrors.email = 'Please enter a valid email address.';
-    }
-    if (!passwordRegex.test(data.password)) {
-      newErrors.password = 'Password must be 8-16 characters with at least one lowercase, one uppercase, one digit, and one special character.';
-    }
-    if (data.password !== data.confirmPassword) {
-      newErrors.confirmPassword = 'Passwords do not match.';
-    }
-    return newErrors;
   };
 
   const handleSubmit = (e) => {
     e.preventDefault()
     
-    const validationErrors = validate(formData);
-    setErrors(validationErrors);
+    Object.keys(formData).forEach(key => validateField(key, formData[key]));
     
-    if (Object.keys(validationErrors).length === 0) {
+    const hasErrors = Object.values(errors).some(error => error !== '');
+    const hasEmptyFields = Object.values(formData).some(value => value.trim() === '');
+    
+    if (!hasErrors && !hasEmptyFields) {
       localStorage.setItem('userData', JSON.stringify({
         name: formData.name,
         username: formData.username,
@@ -67,7 +101,8 @@ function Signup() {
               id="name"
               name="name"
               value={formData.name}
-              onChange={(e) => setFormData({...formData, [e.target.name]: e.target.value})}
+              onChange={handleChange}
+              className={errors.name ? 'invalid' : ''}
               placeholder="Enter your full name"
               required
             />
@@ -81,7 +116,8 @@ function Signup() {
               id="username"
               name="username"
               value={formData.username}
-              onChange={(e) => setFormData({...formData, [e.target.name]: e.target.value})}
+              onChange={handleChange}
+              className={errors.username ? 'invalid' : ''}
               placeholder="Enter your username"
               required
             />
@@ -95,7 +131,8 @@ function Signup() {
               id="email"
               name="email"
               value={formData.email}
-              onChange={(e) => setFormData({...formData, [e.target.name]: e.target.value})}
+              onChange={handleChange}
+              className={errors.email ? 'invalid' : ''}
               placeholder="Enter your email"
               required
             />
@@ -109,7 +146,8 @@ function Signup() {
               id="password"
               name="password"
               value={formData.password}
-              onChange={(e) => setFormData({...formData, [e.target.name]: e.target.value})}
+              onChange={handleChange}
+              className={errors.password ? 'invalid' : ''}
               placeholder="Enter your password"
               required
             />
@@ -123,14 +161,19 @@ function Signup() {
               id="confirmPassword"
               name="confirmPassword"
               value={formData.confirmPassword}
-              onChange={(e) => setFormData({...formData, [e.target.name]: e.target.value})}
+              onChange={handleChange}
+              className={errors.confirmPassword ? 'invalid' : ''}
               placeholder="Confirm your password"
               required
             />
             {errors.confirmPassword && <span className="error">{errors.confirmPassword}</span>}
           </div>
 
-          <button type="submit" className="btn btn-primary btn-block">
+          <button 
+            type="submit" 
+            className="btn btn-primary btn-block"
+            disabled={Object.values(errors).some(error => error) || Object.values(formData).some(value => !value.trim())}
+          >
             Sign Up
           </button>
         </form>
