@@ -85,7 +85,8 @@ function Signup() {
         email: formData.email,
       }))
 
-      navigate('/success')
+      useNavigate('/success')
+
     }
   }
 
