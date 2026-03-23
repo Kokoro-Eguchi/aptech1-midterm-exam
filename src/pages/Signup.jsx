@@ -5,31 +5,54 @@ import './Pages.css'
 function Signup() {
   const [formData, setFormData] = useState({
     name: '',
+    username: '',
     email: '',
     password: '',
     confirmPassword: '',
   })
+  const [errors, setErrors] = useState({})
   const navigate = useNavigate()
+
+  const nameRegex = /^[A-Za-z ]{2,}$/;
+  const usernameRegex = /^[A-Za-z0-9._-]+$/;
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,16}$/;
+
+  const validate = (data) => {
+    const newErrors = {};
+    if (!nameRegex.test(data.name)) {
+      newErrors.name = 'Name must be at least 2 characters and contain only letters and spaces.';
+    }
+    if (!usernameRegex.test(data.username)) {
+      newErrors.username = 'Username can only contain letters, numbers, dots, underscores, and hyphens.';
+    }
+    if (!emailRegex.test(data.email)) {
+      newErrors.email = 'Please enter a valid email address.';
+    }
+    if (!passwordRegex.test(data.password)) {
+      newErrors.password = 'Password must be 8-16 characters with at least one lowercase, one uppercase, one digit, and one special character.';
+    }
+    if (data.password !== data.confirmPassword) {
+      newErrors.confirmPassword = 'Passwords do not match.';
+    }
+    return newErrors;
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault()
     
-    if (!formData.name || !formData.email || !formData.password || !formData.confirmPassword) {
-      alert('All fields are required')
-      return
-    }
+    const validationErrors = validate(formData);
+    setErrors(validationErrors);
     
-    if (formData.password !== formData.confirmPassword) {
-      alert('Passwords do not match')
-      return
+    if (Object.keys(validationErrors).length === 0) {
+      localStorage.setItem('userData', JSON.stringify({
+        name: formData.name,
+        username: formData.username,
+        email: formData.email,
+      }))
+
+      navigate('/success')
     }
-
-    localStorage.setItem('userData', JSON.stringify({
-      name: formData.name,
-      email: formData.email,
-    }))
-
-    navigate('/success')
   }
 
   return (
@@ -48,6 +71,21 @@ function Signup() {
               placeholder="Enter your full name"
               required
             />
+            {errors.name && <span className="error">{errors.name}</span>}
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="username">Username</label>
+            <input
+              type="text"
+              id="username"
+              name="username"
+              value={formData.username}
+              onChange={(e) => setFormData({...formData, [e.target.name]: e.target.value})}
+              placeholder="Enter your username"
+              required
+            />
+            {errors.username && <span className="error">{errors.username}</span>}
           </div>
 
           <div className="form-group">
@@ -61,6 +99,7 @@ function Signup() {
               placeholder="Enter your email"
               required
             />
+            {errors.email && <span className="error">{errors.email}</span>}
           </div>
 
           <div className="form-group">
@@ -74,6 +113,7 @@ function Signup() {
               placeholder="Enter your password"
               required
             />
+            {errors.password && <span className="error">{errors.password}</span>}
           </div>
 
           <div className="form-group">
@@ -87,6 +127,7 @@ function Signup() {
               placeholder="Confirm your password"
               required
             />
+            {errors.confirmPassword && <span className="error">{errors.confirmPassword}</span>}
           </div>
 
           <button type="submit" className="btn btn-primary btn-block">
@@ -99,3 +140,4 @@ function Signup() {
 }
 
 export default Signup
+
