@@ -139,6 +139,14 @@
   color: #666;
 }
 
+.edit-input {
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+  max-width: 200px;
+}
+
 .no-data {
   text-align: center;
   color: #999;
